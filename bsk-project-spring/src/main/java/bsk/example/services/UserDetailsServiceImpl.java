@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import bsk.example.repository.UserRepository;
 
+/*
+ * Serwis służący do pobierania użytkownika jako obiekt UserDetails
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 

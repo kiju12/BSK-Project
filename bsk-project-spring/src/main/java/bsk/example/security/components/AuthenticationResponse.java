@@ -1,5 +1,8 @@
 package bsk.example.security.components;
 
+/*
+ * Klasa opakowywująca token do wysyłki.
+ */
 public class AuthenticationResponse {
 
 	private String token;

@@ -13,6 +13,9 @@ import javax.persistence.ManyToMany;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
+/*
+ * Obiekt użytkownika
+ */
 @Entity
 public class User implements Serializable, UserDetails {
     

@@ -8,6 +8,9 @@ import org.springframework.validation.Validator;
 import bsk.example.domain.User;
 import bsk.example.repository.UserRepository;
 
+/*
+ * Sprawdzenie danych użytkownika wprowadzonych z formularze rejestracyjnego, wg określonych kryteriów.
+ */
 @Component
 public class UserValidator implements Validator {
 
@@ -22,6 +25,11 @@ public class UserValidator implements Validator {
 	@Override
 	public void validate(Object obj, Errors errors) {
 		User user = (User) obj;
+		
+		if (user.getUsername() == null || user.getPassword() == null || user.getEmail() == null) {
+			errors.reject("required", "Nie wszystkie wymagane pola zostały wypełnione");
+			return;
+		}
 		
 		String uName = user.getUsername();
 		if (userRepo.existsByUsername(uName)) errors.reject("username", "Istnieje już użytkownik o takiej nazwie.");

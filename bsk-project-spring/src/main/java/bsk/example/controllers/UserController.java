@@ -1,5 +1,8 @@
 package bsk.example.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.logging.Logger;
@@ -7,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import bsk.example.domain.Authority;
 import bsk.example.domain.User;
+import bsk.example.domain.validators.UserValidationErrors;
 import bsk.example.domain.validators.UserValidator;
 import bsk.example.repository.AuthorityRepository;
 import bsk.example.repository.UserRepository;
@@ -27,6 +33,9 @@ import bsk.example.security.components.AuthenticationRequest;
 import bsk.example.security.components.AuthenticationResponse;
 import bsk.example.security.components.JWTUtil;
 
+/*
+ * Kontroler przyjmujący zapytania dotyczące odświeżenia tokenu oraz rejestracji/logowania użytkowników.
+ */
 @RestController
 public class UserController {
 
@@ -50,43 +59,65 @@ public class UserController {
 	@Autowired
 	private UserValidator userValidate;
 	
+	/*
+	 * Metoda do rejestracji użytkownika. Waliduje jego pola (klasa UserValidator), dodaje role "ROLE_USER", koduje hasło i domyślnie
+	 * ustawia stan konta jako "nieaktywne".
+	 * @param user Obiekt użytkownika przechwycony jako JSON i przekonwertowany ja obiekt
+	 * @param errors Rejestr błędów automatycznie inicjalizowany przez Spring'a
+	 * @return UserValidationErrors Zwraca obiekt zawierający Mapę -> (Kod błędu, Wiadomość błędu). Gdy błędy walidacji nie występują zwraca
+	 * pustą mapę
+	 */
 	@PostMapping("/register")
-	public boolean registerUser(@RequestBody User user, BindingResult errors) {
-		user.setUsername(user.getUsername().trim());
-		user.setEmail(user.getEmail().trim());
+	public UserValidationErrors registerUser(@RequestBody User user, BindingResult errors) {
 		userValidate.validate(user, errors);
 		
 		if (errors.hasErrors()) {
-			for (ObjectError e : errors.getAllErrors()) {
-				log.error(e.getCode() + " - " + e.getDefaultMessage());
+			Map<String, String> validErrors = new HashMap<>(errors.getAllErrors().size());
+			for (ObjectError error : errors.getAllErrors()) {
+				 validErrors.put(error.getCode(), error.getDefaultMessage());
 			}
-			return false;
+			return new UserValidationErrors(validErrors);
 		}
 		
-		if (userRepo.existsByUsername(user.getUsername())) {
-			log.info("User: " + user.getUsername() + " exists.");
-			return false;
-		} else {
 			Authority userRole = authRepo.findByAuthority("ROLE_USER");
 			user.getAuthorities().add(userRole);
 			user.setPassword(bCryptPassEncoder.encode(user.getPassword()));
 			user.setEnabled(false);
 			userRepo.save(user);
 			log.info("User registered.");
-			return true;
-		}
+			return new UserValidationErrors();
 
 	}
 
+	
+	/*
+	 * Metoda służąca do logowania. Sprawdza login i hasło za pomocą customowego Authentication Managera,
+	 * nastepnie dodaje je do kontextu security Spring'a i generuje token dla użytkownika.
+	 * @param request Opakowane dane do logowania (username/password)
+	 * @return ResponseEntity<?> Zwraca token opakowany w AuthenticationResponse i dołącza do niego status Http
+	 */
 	@PostMapping("/auth")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest request) {
-		SecurityContextHolder.getContext().setAuthentication(authManager
-				.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())));
+		Authentication auth = null;
+		
+		try {
+			auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+		} catch (AuthenticationException except) {
+			log.error("Error during user authentication");
+			return ResponseEntity.badRequest().body(except.getMessage());
+		}
+		
+		SecurityContextHolder.getContext().setAuthentication(auth);
 
 		UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
 		return ResponseEntity.ok(new AuthenticationResponse(JWTUtil.generateToken(userDetails)));
 	}
 
+	/*
+	 * Metoda odświeżająca token (przedłużenie czasu wygaśnięcia tokenu)
+	 * @param request Zapytanie z tokenem w headerze
+	 * @return Zwraca token opakowany w AuthenticationResponse i dołącza do niego status Http
+	 */
 	@GetMapping("/refresh")
 	public ResponseEntity<?> refreshToken(HttpServletRequest request) {
 		String token = JWTUtil.trimToken(request.getHeader(JWTUtil.HEADER));
@@ -94,9 +125,9 @@ public class UserController {
 		String newToken = null;
 		if (JWTUtil.canTokenBeRefreshed(token)) {
 			newToken = JWTUtil.refrehToken(token);
-			log.info("TOKEN ODSWIEZONY " + newToken);
+			log.info("Token refreshed.");
 		} else {
-			log.error("CHUJA WYSZLO Z ODSWIEZANIA TOKENU");
+			log.error("Token cannot be refreshed.");
 			return ResponseEntity.badRequest().body(null);
 		}
 		

@@ -15,22 +15,29 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+
+/*
+ * Filtr uwierzytelniający.
+ * Przechwytuje wszystkie chronione zapytania (określone w klasie WebSecurityConfig)
+ * i wywołuje dla nich doFilterInternal(..)
+ */
 public class AuthenticationFilter extends OncePerRequestFilter {
 
-//	private final String jwtHeader = "Authorization";
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
+	/*
+	 * Pobiera token z zapytania, z tokenu pobieramy nazwę użytkownika - na podstawie której pobieramy go z bazy danych
+	 * i sprawdzamy czy dane w zawarte w tokenie zgadzają się z danymi z bazy danych.
+	 * Jeśli tak - dodajemy użytkownika do kontextu security/
+	 * Jeśli się nie zgadzają Spring odcina dostęp i wyrzuca HTTP 403 - Access Denied.
+	 * @see org.springframework.web.filter.OncePerRequestFilter#doFilterInternal(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, javax.servlet.FilterChain)
+	 */
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String token = JWTUtil.trimToken(request.getHeader(JWTUtil.HEADER));
-		
-//		if (token != null && token.startsWith("Bearer ")) {
-//			token = token.substring(7);
-//		}
-		
 		String username = JWTUtil.getUsernameFromToken(token);
 		
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

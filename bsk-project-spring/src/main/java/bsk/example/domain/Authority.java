@@ -14,6 +14,9 @@ import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/*
+ * Obiekt roli użytkownika
+ */
 @Entity
 public class Authority implements Serializable, GrantedAuthority {
 

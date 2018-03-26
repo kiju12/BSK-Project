@@ -1,5 +1,8 @@
 package bsk.example.security.components;
 
+/*
+ * Klasa do przechwycenia danych przesłanych z formularza logowania.
+ */
 public class AuthenticationRequest {
 
 	private String username;
