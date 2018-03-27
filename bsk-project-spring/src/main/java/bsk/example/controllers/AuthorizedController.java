@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import bsk.example.domain.SimpleObject;
+
 /*
  * Kontrolery z danymi
  */
@@ -16,8 +18,8 @@ public class AuthorizedController {
 	 * Kontroler do którego dostęp ma zalogowany użytkownik (lub admin).
 	 */
 	@GetMapping("/user")
-	public String securedUser() {
-		return "Dane do których dostęp ma jedynie użytkownik (lub administrator).";
+	public SimpleObject securedUser() {
+		return new SimpleObject("Dane do których dostęp ma jedynie użytkownik (lub administrator).");
 	}
 	
 	/*
@@ -25,15 +27,15 @@ public class AuthorizedController {
 	 */
 	@GetMapping("/admin")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public String securedAdmin() {
-		return "Dane do których dostęp ma jedynie administrator.";
+	public SimpleObject securedAdmin() {
+		return new SimpleObject("Dane do których dostęp ma jedynie administrator.");
 	}
 	
 	/*
 	 * Kontroler do którego dostęp ma każdy.
 	 */
 	@GetMapping("/anyone")
-	public String securedAnyone() {
-		return "Dane do których dostęp ma każdy.";
+	public SimpleObject securedAnyone() {
+		return new SimpleObject("Dane do których dostęp ma każdy.");
 	}
 }
