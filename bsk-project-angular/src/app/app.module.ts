@@ -5,15 +5,12 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { AppComponent } from './app.component';
-import { CorsTestService } from './cors-test/cors-test.service';
-import { CorsTestComponent } from './cors-test/cors-test.component';
 
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    CorsTestComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
