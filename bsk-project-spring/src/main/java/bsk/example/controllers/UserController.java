@@ -32,6 +32,7 @@ import bsk.example.repository.UserRepository;
 import bsk.example.security.components.AuthenticationRequest;
 import bsk.example.security.components.AuthenticationResponse;
 import bsk.example.security.components.JWTUtil;
+import bsk.example.services.EmailService;
 
 /*
  * Kontroler przyjmujący zapytania dotyczące odświeżenia tokenu oraz rejestracji/logowania użytkowników.
@@ -59,6 +60,9 @@ public class UserController {
 	@Autowired
 	private UserValidator userValidate;
 	
+	@Autowired
+	private EmailService emailService;
+	
 	/*
 	 * Metoda do rejestracji użytkownika. Waliduje jego pola (klasa UserValidator), dodaje role "ROLE_USER", koduje hasło i domyślnie
 	 * ustawia stan konta jako "nieaktywne".
@@ -83,10 +87,12 @@ public class UserController {
 			user.getAuthorities().add(userRole);
 			user.setPassword(bCryptPassEncoder.encode(user.getPassword()));
 			user.setEnabled(false);
-			userRepo.save(user);
+			User savedUser = userRepo.save(user);
 			log.info("User registered.");
+			
+			emailService.sendActivationEmailToUser(savedUser);
+			
 			return new UserValidationErrors();
-
 	}
 
 	

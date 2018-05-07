@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -33,6 +35,9 @@ public class User implements Serializable, UserDetails {
     @ManyToMany(fetch=FetchType.EAGER)
     private Collection<Authority> authorities;
 
+    @OneToOne(cascade=CascadeType.ALL)
+    private ActivationCode activationCode;
+    
     public User() {
     	this.authorities = Collections.emptyList();
     }
@@ -109,6 +114,16 @@ public class User implements Serializable, UserDetails {
 	public void setAuthorities(Collection<Authority> authorities) {
 		this.authorities = authorities;
 	}
+
+	public void removeActivationCode() {
+		this.activationCode.setUser(null);
+		this.activationCode = null;
+	}
+
+	public void setActivationCode(ActivationCode activationCode) {
+		this.activationCode = activationCode;
+	}
+	
 	
 	
 }

@@ -46,8 +46,9 @@ public class BskProjectApplication {
 		List<Authority> authorities = new ArrayList<>();
 		authorities.add(authRepo.findByAuthority("ROLE_USER"));
 		authorities.add(authRepo.findByAuthority("ROLE_ADMIN"));
-		User user = new User("admin", bCryptPassEncoder.encode("admin123"), authorities);
+		User admin = new User("admin", bCryptPassEncoder.encode("admin123"), authorities);
+		admin.setEnabled(true);
 		
-		log.info("User " + userRepo.save(user).getUsername() + " added.");
+		log.info("User " + userRepo.save(admin).getUsername() + " added.");
 	}
 }

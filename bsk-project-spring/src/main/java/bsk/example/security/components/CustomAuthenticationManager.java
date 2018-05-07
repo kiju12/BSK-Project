@@ -46,6 +46,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 		
 		if (user == null) throw new BadCredentialsException("User " + username + " does not exist.");
 		if (!bCryptPassEncoder.matches(password, user.getPassword())) throw new BadCredentialsException("Wrong password for user: " + username + ".");
+		if (!user.isEnabled()) throw new BadCredentialsException("User " + username + " is not activated. Check e-mail for activate link.");
 		
 		return new UsernamePasswordAuthenticationToken(username, password, user.getAuthorities());
 	}
