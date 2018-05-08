@@ -1,0 +1,30 @@
+<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark indigo fixed-top" [containerInside]="false">
+  <logo>
+    <a class="navbar-brand" href="#">Bezpieczeństwo systemów informatycznych</a>
+  </logo>
+
+  <links>
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+          <a class="nav-link waves-light" mdbWavesEffect>Strona domowa</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link waves-light" mdbWavesEffect>Zalogowani</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link waves-light" mdbWavesEffect>Admin</a>
+      </li>
+    </ul>
+
+    <div class="nav-item dropdown btn-group" dropdown>
+      <a dropdownToggle class="nav-link dropdown-toggle waves-effect waves-light" mdbWavesEffect>
+        <i class="fa fa-user"></i> Konto
+      </a>
+      <div class="dropdown-menu dropdown-menu-left" role="menu">
+          <a class="dropdown-item waves-effect waves-light" href="account">My account</a>
+          <a class="dropdown-item waves-effect waves-light" href="logout">Log out</a>
+      </div>
+    </div>
+
+  </links>
+</mdb-navbar>
