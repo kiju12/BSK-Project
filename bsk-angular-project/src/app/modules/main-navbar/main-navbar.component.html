@@ -5,26 +5,30 @@
 
   <links>
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-          <a class="nav-link waves-light" mdbWavesEffect>Strona domowa</a>
+      <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link waves-light" routerLink="home" mdbWavesEffect>Strona domowa</a>
       </li>
-      <li class="nav-item">
-          <a class="nav-link waves-light" mdbWavesEffect>Zalogowani</a>
+      <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link waves-light" routerLink="zalogowani" mdbWavesEffect>Zalogowani</a>
       </li>
-      <li class="nav-item">
-          <a class="nav-link waves-light" mdbWavesEffect>Admin</a>
+      <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link waves-light" routerLink="admin" mdbWavesEffect>Admin</a>
       </li>
     </ul>
 
-    <div class="nav-item dropdown btn-group" dropdown>
+    <div class="nav-item dropdown btn-group pr-5" dropdown>
       <a dropdownToggle class="nav-link dropdown-toggle waves-effect waves-light" mdbWavesEffect>
         <i class="fa fa-user"></i> Konto
       </a>
       <div class="dropdown-menu dropdown-menu-left" role="menu">
-          <a class="dropdown-item waves-effect waves-light" href="account">My account</a>
-          <a class="dropdown-item waves-effect waves-light" href="logout">Log out</a>
+        <button class="dropdown-item waves-effect waves-light" (click)="loginModal.show()">Logowanie</button>
+        <button class="dropdown-item waves-effect waves-light" (click)="registerModal.show()">Rejestracja</button>
+        <button class="dropdown-item waves-effect waves-light">Wyloguj sie</button>
       </div>
     </div>
 
   </links>
 </mdb-navbar>
+
+<app-login-modal #loginModal [registerModal]="registerModal"></app-login-modal>
+<app-register-modal #registerModal [loginModal]="loginModal"></app-register-modal>
