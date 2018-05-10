@@ -1,10 +1,17 @@
 package bsk.example.controllers;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.assertj.core.util.Arrays;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -83,16 +90,22 @@ public class UserController {
 			return new UserValidationErrors(validErrors);
 		}
 		
-			Authority userRole = authRepo.findByAuthority("ROLE_USER");
-			user.getAuthorities().add(userRole);
-			user.setPassword(bCryptPassEncoder.encode(user.getPassword()));
-			user.setEnabled(false);
-			User savedUser = userRepo.save(user);
-			log.info("User registered.");
-			
-			emailService.sendActivationEmailToUser(savedUser);
-			
-			return new UserValidationErrors();
+		Authority userRole = authRepo.findByAuthority("ROLE_USER");
+		
+		// usuniecie bledu podczas nieprzekazania w zadaniu listy authorities
+		// lub przekazania listy z jakas rola (wtedy dostawalismy blad 500 z serwera)
+		Collection<Authority> roles = new HashSet<Authority>();
+		roles.add(userRole);
+		user.setAuthorities(roles);
+		
+		user.setPassword(bCryptPassEncoder.encode(user.getPassword()));
+		user.setEnabled(false);
+		User savedUser = userRepo.save(user);
+		log.info("User registered.");
+		
+		emailService.sendActivationEmailToUser(savedUser);
+		
+		return new UserValidationErrors();
 	}
 
 	
