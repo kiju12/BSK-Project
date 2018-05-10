@@ -3,20 +3,34 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
 import { AppComponent } from './app.component';
-import { MainNavbarComponent } from './modules/main-navbar/main-navbar.component';
-import { MainFooterComponent } from './modules/main-footer/main-footer.component';
-import { MainPageContentComponent } from './modules/main-page-content/main-page-content.component';
+import {
+  MainNavbarComponent,
+  MainFooterComponent,
+  MainPageContentComponent,
+  LoggedUsersComponent,
+  AdminContentComponent,
+  LoginModalComponent,
+  RegisterModalComponent
+} from './modules';
+import { AppRoutingModule } from './modules/routing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainNavbarComponent,
     MainFooterComponent,
-    MainPageContentComponent
+    MainPageContentComponent,
+    LoggedUsersComponent,
+    AdminContentComponent,
+    LoginModalComponent,
+    RegisterModalComponent
   ],
   imports: [
     BrowserModule,
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   schemas: [ NO_ERRORS_SCHEMA ],
   providers: [],
