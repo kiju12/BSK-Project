@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { User } from '../../models';
 
 @Component({
   selector: 'app-login-modal',
@@ -11,10 +12,9 @@ export class LoginModalComponent implements OnInit {
   @Input() registerModal;
   @ViewChild('loginModal') public loginModal;
   loginForm: FormGroup;
-  user: any;
+  user: User;
 
   constructor(private formBuilder: FormBuilder) {
-    this.user = { username: null, password: null };
     this.initLoginForm();
   }
 
@@ -32,9 +32,14 @@ export class LoginModalComponent implements OnInit {
   }
 
   initLoginForm() {
+    this.initUser();
     this.loginForm = this.formBuilder.group({
       userName: [this.user.username, Validators.required],
       password: [this.user.password, Validators.required]
     });
+  }
+
+  initUser() {
+    this.user = { username: null, password: null };
   }
 }
