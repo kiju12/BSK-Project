@@ -1,0 +1,45 @@
+<div mdbModal #loginModal="mdb-modal" class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header light-blue darken-3 white-text">
+                <h4 class="title"><i class="fa fa-user"></i> Zaloguj się</h4>
+                <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close" (click)="loginModal.hide()">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+              <form [formGroup]="loginForm">
+
+                <div class="md-form mb-5">
+                  <i class="fa fa-user prefix grey-text"></i>
+                  <input type="text" formControlName="userName" id="loginUserName" class="form-control" mdbInputDirective data-error="Minimalna dlugosc to 4 znaki"
+                    data-success="   " [(ngModel)]="user.username">
+                  <label for="loginUserName">Nazwa użytkownika</label>
+                </div>
+                <div class="md-form mb-5">
+                  <i class="fa fa-lock prefix grey-text"></i>
+                  <input type="password" formControlName="password" id="loginUserPassword" class="form-control" mdbInputDirective data-error="Hasło nie moze byc puste"
+                    data-success="   " [(ngModel)]="user.password">
+                  <label for="loginUserPassword">Hasło</label>
+                </div>
+
+                <div class="text-center">
+                  <button class="btn btn-deep-orange waves-light" mdbWavesEffect>Zaloguj się</button>
+                </div>
+              </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="options text-center text-md-left mt-1">
+                    <p>Nie jestes zarejestrowany? <button (click)="showRegisterModal()" class="btn btn-link">Zrob to teraz</button></p>
+                </div>
+                <button type="button" class="btn btn-outline-info relative m-2" data-dismiss="modal" (click)="loginModal.hide()" mdbWavesEffect>Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
