@@ -19,7 +19,7 @@ public class ActivationController {
 	@Autowired
 	private UserRepository userRepo;
 	
-	@PostMapping("/activate")
+	@PostMapping("api/activate")
 	public boolean activateUser(@RequestBody ActivationCode activationCode) {
 		String requestCode = activationCode.getCode();
 		ActivationCode reloadedCodeFromDb = codeRepo.getOne(activationCode.getId());

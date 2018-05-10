@@ -11,7 +11,7 @@ import bsk.example.domain.SimpleObject;
  * Kontrolery z danymi
  */
 @RestController
-@RequestMapping("/content")
+@RequestMapping("api/content")
 public class AuthorizedController {
 
 	/*
