@@ -15,11 +15,15 @@ import {
 } from './modules';
 import { AppRoutingModule } from './modules/routing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AuthenticationService } from './services/authentication.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { ActivateAccountService } from './services/activate-account.service';
+import {
+  ActivateAccountService,
+  AuthenticationService,
+  AuthGuardService,
+  AdminAuthGuardService
+} from './services';
 
 @NgModule({
   declarations: [
@@ -46,7 +50,9 @@ import { ActivateAccountService } from './services/activate-account.service';
   providers: [
     HttpClient,
     AuthenticationService,
-    ActivateAccountService
+    ActivateAccountService,
+    AuthGuardService,
+    AdminAuthGuardService
   ],
   bootstrap: [AppComponent]
 })

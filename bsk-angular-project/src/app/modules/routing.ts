@@ -6,11 +6,20 @@ import {
   AdminContentComponent,
   ActivateAccountComponent
 } from './';
+import { AuthGuardService, AdminAuthGuardService } from '../services';
 
 const appRoutes: Routes = [
   { path: 'home', component: MainPageContentComponent },
-  { path: 'zalogowani', component: LoggedUsersComponent },
-  { path: 'admin', component: AdminContentComponent },
+  {
+    path: 'zalogowani',
+    component: LoggedUsersComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'admin',
+    component: AdminContentComponent,
+    canActivate: [AdminAuthGuardService]
+  },
   {
     path: '',
     children: [
