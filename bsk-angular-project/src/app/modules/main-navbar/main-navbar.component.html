@@ -1,0 +1,34 @@
+<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark indigo fixed-top" [containerInside]="false">
+  <logo>
+    <a class="navbar-brand" href="#">Bezpieczeństwo systemów informatycznych</a>
+  </logo>
+
+  <links>
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link waves-light" routerLink="home" mdbWavesEffect>Strona domowa</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" *ngIf="zalogowaniStatus">
+          <a class="nav-link waves-light" routerLink="zalogowani" mdbWavesEffect>Zalogowani</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" *ngIf="adminStatus">
+          <a class="nav-link waves-light" routerLink="admin" mdbWavesEffect>Admin</a>
+      </li>
+    </ul>
+
+    <div class="nav-item dropdown btn-group pr-5" dropdown>
+      <a dropdownToggle class="nav-link dropdown-toggle waves-effect waves-light" mdbWavesEffect>
+        <i class="fa fa-user"></i> Konto
+      </a>
+      <div class="dropdown-menu dropdown-menu-left" role="menu">
+        <button class="dropdown-item waves-effect waves-light" (click)="loginModal.show()" id="buttonLoginModal">Logowanie</button>
+        <button class="dropdown-item waves-effect waves-light" (click)="registerModal.show()">Rejestracja</button>
+        <button class="dropdown-item waves-effect waves-light" (click)="logout()" *ngIf="loginStatus">Wyloguj sie</button>
+      </div>
+    </div>
+
+  </links>
+</mdb-navbar>
+
+<app-login-modal #loginModal [registerModal]="registerModal" (emitStatusAfterLogin)="changeValuesInMenu();"></app-login-modal>
+<app-register-modal #registerModal [loginModal]="loginModal"></app-register-modal>

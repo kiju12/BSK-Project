@@ -1,12 +1,15 @@
 package bsk.example.controllers;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -71,8 +74,8 @@ public class UserController {
 	 * @return UserValidationErrors Zwraca obiekt zawierający Mapę -> (Kod błędu, Wiadomość błędu). Gdy błędy walidacji nie występują zwraca
 	 * pustą mapę
 	 */
-	@PostMapping("/register")
-	public UserValidationErrors registerUser(@RequestBody User user, BindingResult errors) {
+	@PostMapping("api/register")
+	public ResponseEntity<?> registerUser(@RequestBody User user, BindingResult errors) {
 		userValidate.validate(user, errors);
 		
 		if (errors.hasErrors()) {
@@ -80,19 +83,25 @@ public class UserController {
 			for (ObjectError error : errors.getAllErrors()) {
 				 validErrors.put(error.getCode(), error.getDefaultMessage());
 			}
-			return new UserValidationErrors(validErrors);
+			return ResponseEntity.badRequest().body(new UserValidationErrors(validErrors));
 		}
 		
-			Authority userRole = authRepo.findByAuthority("ROLE_USER");
-			user.getAuthorities().add(userRole);
-			user.setPassword(bCryptPassEncoder.encode(user.getPassword()));
-			user.setEnabled(false);
-			User savedUser = userRepo.save(user);
-			log.info("User registered.");
-			
-			emailService.sendActivationEmailToUser(savedUser);
-			
-			return new UserValidationErrors();
+		Authority userRole = authRepo.findByAuthority("ROLE_USER");
+		
+		// usuniecie bledu podczas nieprzekazania w zadaniu listy authorities
+		// lub przekazania listy z jakas rola (wtedy dostawalismy blad 500 z serwera)
+		Collection<Authority> roles = new HashSet<Authority>();
+		roles.add(userRole);
+		user.setAuthorities(roles);
+		
+		user.setPassword(bCryptPassEncoder.encode(user.getPassword()));
+		user.setEnabled(false);
+		User savedUser = userRepo.save(user);
+		log.info("User registered.");
+		
+		emailService.sendActivationEmailToUser(savedUser);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	
@@ -102,7 +111,7 @@ public class UserController {
 	 * @param request Opakowane dane do logowania (username/password)
 	 * @return ResponseEntity<?> Zwraca token opakowany w AuthenticationResponse i dołącza do niego status Http
 	 */
-	@PostMapping("/auth")
+	@PostMapping("api/auth")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest request) {
 		Authentication auth = null;
 		
@@ -124,7 +133,7 @@ public class UserController {
 	 * @param request Zapytanie z tokenem w headerze
 	 * @return Zwraca token opakowany w AuthenticationResponse i dołącza do niego status Http
 	 */
-	@GetMapping("/refresh")
+	@GetMapping("api/refresh")
 	public ResponseEntity<?> refreshToken(HttpServletRequest request) {
 		String token = JWTUtil.trimToken(request.getHeader(JWTUtil.HEADER));
 		

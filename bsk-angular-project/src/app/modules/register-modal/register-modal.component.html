@@ -1,0 +1,56 @@
+<div mdbModal #registerModal="mdb-modal" class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header light-blue darken-3 white-text">
+        <h4 class="title">
+          <i class="fa fa-user-plus"></i> Zarejestruj się</h4>
+        <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close" (click)="registerModal.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <form [formGroup]="registerForm">
+
+          <div class="md-form mb-5">
+            <i class="fa fa-user prefix grey-text"></i>
+            <input type="text" id="registerUserName" class="form-control" mdbInputDirective data-error="Minimalna dlugosc to 4 znaki"
+              data-success=" " formControlName="userName" [(ngModel)]="user.username" minLength="4" maxLength="16">
+            <label for="registerUserName">Nazwa użytkownika</label>
+          </div>
+          <div class="md-form mb-5">
+            <i class="fa fa-lock prefix grey-text"></i>
+            <input type="password" id="registerUserPassword" class="form-control" data-success=" " formControlName="password" [(ngModel)]="user.password"
+              mdbInputDirective data-error="Hasło musi posiadac co najmniej jeden znak specjalny i jedna literę. Musi mieć od 6 do 16 znaków."
+              minLength="6" maxLength="16">
+            <label for="registerUserPassword">Hasło</label>
+          </div>
+          <div class="md-form mb-5">
+            <i class="fa fa-envelope-open prefix grey-text"></i>
+            <input type="email" id="registerUserEmail" class="form-control" mdbInputDirective data-error="Email nie moze byc pusty" data-success=" "
+              formControlName="email" [(ngModel)]="user.email">
+            <label for="registerUserEmail">Email</label>
+          </div>
+
+          <div class="text-center">
+            <button (click)="registerUserAccount()" [disabled]="registerForm.invalid" class="btn btn-deep-orange waves-light" mdbWavesEffect>Zarejestruj się</button>
+          </div>
+        </form>
+
+      </div>
+
+      <div class="modal-footer">
+        <div class="options text-center text-md-left mt-1">
+          <p>Jestes juz zarejestrowanym uzytkownikiem?
+            <button (click)="showLoginModal()" class="btn btn-link">Zaloguj sie</button>
+          </p>
+        </div>
+        <button type="button" class="btn btn-outline-info relative m-2" data-dismiss="modal" (click)="registerModal.hide()" mdbWavesEffect>Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>

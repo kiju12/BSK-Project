@@ -1,0 +1,21 @@
+<div class="container" style="margin-top: 200px;">
+  <div *ngIf="status" style="text-align: center;">
+    <span style="display: block; font-size: 15rem;">
+      <i class="fa fa-thumbs-up"></i>
+    </span>
+    <h4>
+      Potwierdzono adres email. Możesz się zalogować!
+    </h4>
+  </div>
+
+  <div *ngIf="!status" style="text-align: center;">
+    <span style="display: block; font-size: 15rem;">
+      <i class="fa fa-thumbs-down"></i>
+    </span>
+    <h4>
+      Upsss! Cos poszlo nie tak! Sprobuj ponownie.
+    </h4>
+  </div>
+</div>
+
+ <app-main-footer style="position: absolute; bottom: 0; width: 100%"></app-main-footer>

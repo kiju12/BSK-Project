@@ -1,0 +1,37 @@
+<div class="container" style="margin-top: 200px;">
+
+  <div class="row">
+    <div class="offset-md-3 col-md-6">
+      <form [formGroup]="addItemForm">
+        <p class="h5 text-center mb-4">Dodaj przedmiot</p>
+
+        <div class="md-form mb-5">
+          <i class="fa fa-text-height prefix grey-text"></i>
+          <input type="text" formControlName="itemName" id="itemName" class="form-control" mdbInputDirective data-error="Minimalna dlugosc to 4 znaki"
+            data-success=" " [(ngModel)]="itemForm.name">
+          <label for="itemName">Nazwa przedmiotu</label>
+        </div>
+        <div class="md-form mb-5">
+          <i class="fa fa-usd prefix grey-text"></i>
+          <input type="number" formControlName="itemPrice" id="itemPrice" class="form-control" mdbInputDirective data-error="Pole nie moze byc puste"
+            data-success=" " [(ngModel)]="itemForm.price">
+          <label for="itemPrice">Cena</label>
+        </div>
+
+        <div class="md-form mb-5">
+          <i class="fa fa-inbox prefix grey-text"></i>
+          <input type="number" formControlName="itemQuantity" id="itemQuantity" class="form-control" mdbInputDirective data-error="Pole nie moze byc puste"
+            data-success=" " [(ngModel)]="itemForm.quantity">
+          <label for="itemQuantity">Ilość</label>
+        </div>
+
+        <div class="text-center">
+          <button (click)="saveItem()" class="btn btn-deep-orange waves-light" mdbWavesEffect>Zapisz przedmiot</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<app-main-footer style="position: absolute; bottom: 0; width: 100%"></app-main-footer>
