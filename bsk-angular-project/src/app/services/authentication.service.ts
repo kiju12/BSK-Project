@@ -32,7 +32,7 @@ export class AuthenticationService {
       });
   }
 
-  private getToken(): string {
+  getToken(): string {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const token = currentUser && currentUser.token;
     return token ? token : '';

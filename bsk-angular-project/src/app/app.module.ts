@@ -22,7 +22,8 @@ import {
   ActivateAccountService,
   AuthenticationService,
   AuthGuardService,
-  AdminAuthGuardService
+  AdminAuthGuardService,
+  ItemsService
 } from './services';
 
 @NgModule({
@@ -52,7 +53,8 @@ import {
     AuthenticationService,
     ActivateAccountService,
     AuthGuardService,
-    AdminAuthGuardService
+    AdminAuthGuardService,
+    ItemsService
   ],
   bootstrap: [AppComponent]
 })
