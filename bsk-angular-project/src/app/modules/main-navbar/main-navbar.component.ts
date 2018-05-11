@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '../../services/authentication.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-main-navbar',
@@ -7,9 +9,38 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainNavbarComponent implements OnInit {
 
-  constructor() { }
+  zalogowaniStatus: boolean;
+  adminStatus: boolean;
+  loginStatus: boolean;
+
+  constructor(private authService: AuthenticationService) { }
 
   ngOnInit() {
+    this.changeValuesInMenu();
   }
 
+  setMenuStatusFalse() {
+    this.zalogowaniStatus = false;
+    this.adminStatus = false;
+    this.loginStatus = false;
+  }
+
+  changeValuesInMenu() {
+    if (this.authService.isLoggedAdmin()) {
+      this.zalogowaniStatus = true;
+    }
+    if (this.authService.isLoggedUser()) {
+      this.adminStatus = true;
+    }
+    this.loginStatus = true;
+    if (!this.authService.isLoggedIn()) {
+      this.setMenuStatusFalse();
+    }
+  }
+
+  logout() {
+    this.authService.logout();
+    this.changeValuesInMenu();
+    this.authService.reloadPage();
+  }
 }
