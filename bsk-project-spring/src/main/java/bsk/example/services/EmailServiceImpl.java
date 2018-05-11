@@ -1,9 +1,10 @@
 package bsk.example.services;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import bsk.example.domain.ActivationCode;
@@ -23,12 +24,8 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private UserRepository userRepo;
     
-    @Autowired
-    private BCryptPasswordEncoder bCryptPassEncoder;
-    
     private static String URL_ROOT = "http://localhost:4200";
     private static String SUBJECT = "Projekt BSK - Link aktywacyjny";
-    private static String STRING_TO_ENCODE = "activation";
  
     private void sendSimpleMessage(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage(); 
@@ -41,7 +38,7 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public void sendActivationEmailToUser(User userToActivate) {
 		String userEmail = userToActivate.getEmail();
-		String code = bCryptPassEncoder.encode(STRING_TO_ENCODE);
+		String code = UUID.randomUUID().toString();
 		ActivationCode activationCode = new ActivationCode(code);
 		
 		activationCode.setUser(userToActivate);
