@@ -5,3 +5,4 @@ export * from './logged-users/logged-users.component';
 export * from './admin-content/admin-content.component';
 export * from './login-modal/login-modal.component';
 export * from './register-modal/register-modal.component';
+export * from './activate-account/activate-account.component';

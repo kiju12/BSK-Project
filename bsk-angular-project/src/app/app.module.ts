@@ -10,7 +10,8 @@ import {
   LoggedUsersComponent,
   AdminContentComponent,
   LoginModalComponent,
-  RegisterModalComponent
+  RegisterModalComponent,
+  ActivateAccountComponent
 } from './modules';
 import { AppRoutingModule } from './modules/routing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -18,6 +19,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { ActivateAccountService } from './services/activate-account.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { ToastrModule } from 'ngx-toastr';
     LoggedUsersComponent,
     AdminContentComponent,
     LoginModalComponent,
-    RegisterModalComponent
+    RegisterModalComponent,
+    ActivateAccountComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,8 @@ import { ToastrModule } from 'ngx-toastr';
   schemas: [],
   providers: [
     HttpClient,
-    AuthenticationService
+    AuthenticationService,
+    ActivateAccountService
   ],
   bootstrap: [AppComponent]
 })
