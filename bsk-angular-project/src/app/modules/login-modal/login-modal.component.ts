@@ -1,6 +1,8 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from '../../models';
+import { AuthenticationService } from '../../services/authentication.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login-modal',
@@ -13,8 +15,9 @@ export class LoginModalComponent implements OnInit {
   @ViewChild('loginModal') public loginModal;
   loginForm: FormGroup;
   user: User;
+  @Output() emitStatusAfterLogin = new EventEmitter<any>();
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private authService: AuthenticationService, private toastService: ToastrService) {
     this.initLoginForm();
   }
 
@@ -41,5 +44,28 @@ export class LoginModalComponent implements OnInit {
 
   initUser() {
     this.user = { username: null, password: null };
+  }
+
+  loginUser() {
+    this.authService.login(this.user).subscribe(() => {
+      this.loginModal.hide();
+      this.showSuccessAlert();
+    },
+    error => {
+      this.showErrorAlert(error.error);
+    },
+  () => this.emitLoginStatus());
+  }
+
+  emitLoginStatus() {
+    this.emitStatusAfterLogin.emit();
+  }
+
+  showSuccessAlert() {
+    this.toastService.success('Pomyślnie zalogowano!', 'SUKCES!');
+  }
+
+  showErrorAlert(error: string) {
+    this.toastService.error(error, 'BŁĄD!');
   }
 }

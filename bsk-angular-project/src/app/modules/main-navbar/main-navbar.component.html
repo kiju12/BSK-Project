@@ -8,10 +8,10 @@
       <li class="nav-item" routerLinkActive="active">
           <a class="nav-link waves-light" routerLink="home" mdbWavesEffect>Strona domowa</a>
       </li>
-      <li class="nav-item" routerLinkActive="active">
+      <li class="nav-item" routerLinkActive="active" *ngIf="zalogowaniStatus">
           <a class="nav-link waves-light" routerLink="zalogowani" mdbWavesEffect>Zalogowani</a>
       </li>
-      <li class="nav-item" routerLinkActive="active">
+      <li class="nav-item" routerLinkActive="active" *ngIf="adminStatus">
           <a class="nav-link waves-light" routerLink="admin" mdbWavesEffect>Admin</a>
       </li>
     </ul>
@@ -21,14 +21,14 @@
         <i class="fa fa-user"></i> Konto
       </a>
       <div class="dropdown-menu dropdown-menu-left" role="menu">
-        <button class="dropdown-item waves-effect waves-light" (click)="loginModal.show()">Logowanie</button>
+        <button class="dropdown-item waves-effect waves-light" (click)="loginModal.show()" id="buttonLoginModal">Logowanie</button>
         <button class="dropdown-item waves-effect waves-light" (click)="registerModal.show()">Rejestracja</button>
-        <button class="dropdown-item waves-effect waves-light">Wyloguj sie</button>
+        <button class="dropdown-item waves-effect waves-light" (click)="logout()" *ngIf="loginStatus">Wyloguj sie</button>
       </div>
     </div>
 
   </links>
 </mdb-navbar>
 
-<app-login-modal #loginModal [registerModal]="registerModal"></app-login-modal>
+<app-login-modal #loginModal [registerModal]="registerModal" (emitStatusAfterLogin)="changeValuesInMenu();"></app-login-modal>
 <app-register-modal #registerModal [loginModal]="loginModal"></app-register-modal>
