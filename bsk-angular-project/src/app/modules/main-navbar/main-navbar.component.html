@@ -21,8 +21,8 @@
         <i class="fa fa-user"></i> Konto
       </a>
       <div class="dropdown-menu dropdown-menu-left" role="menu">
-        <button class="dropdown-item waves-effect waves-light" (click)="loginModal.show()" id="buttonLoginModal">Logowanie</button>
-        <button class="dropdown-item waves-effect waves-light" (click)="registerModal.show()">Rejestracja</button>
+        <button *ngIf="!loginStatus" class="dropdown-item waves-effect waves-light" (click)="loginModal.show()" id="buttonLoginModal">Logowanie</button>
+        <button *ngIf="!loginStatus" class="dropdown-item waves-effect waves-light" (click)="registerModal.show()">Rejestracja</button>
         <button class="dropdown-item waves-effect waves-light" (click)="logout()" *ngIf="loginStatus">Wyloguj sie</button>
       </div>
     </div>

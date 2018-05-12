@@ -26,10 +26,10 @@ export class MainNavbarComponent implements OnInit {
   }
 
   changeValuesInMenu() {
-    if (this.authService.isLoggedAdmin()) {
+    if (this.authService.isLoggedUser()) {
       this.zalogowaniStatus = true;
     }
-    if (this.authService.isLoggedUser()) {
+    if (this.authService.isLoggedAdmin()) {
       this.adminStatus = true;
     }
     this.loginStatus = true;
